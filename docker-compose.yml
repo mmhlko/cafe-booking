@@ -1,0 +1,56 @@
+services:
+  # Redis service
+  redis:
+    image: redis:7-alpine
+    container_name: cafe_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data/redis:/data
+    networks:
+      - cafe-network
+
+  # API service
+  api:
+    platform: linux/amd64
+    build:
+      context: ./cafe-backend
+      dockerfile: Dockerfile
+      args:
+        - NODE_ENV=development
+    container_name: cafe_api
+    env_file:
+      - .env
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./cafe-backend:/app
+    networks:
+      - cafe-network
+    depends_on:
+      - redis
+
+  # Frontend service
+  frontend:
+    platform: linux/amd64
+    container_name: cafe_frontend
+    env_file:
+      - .env
+    build:
+      context: ./cafe-frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./cafe-frontend:/app:delegated
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    restart: always
+    networks:
+      - cafe-network
+    depends_on:
+      - api
+    command: npm run dev
+
+networks:
+  cafe-network:
+    driver: bridge

@@ -16,7 +16,7 @@ export class TablesApi extends ApiBase {
   }
 
   /**
-   * Получить все столы
+   * Get all tables
    */
   public getTables = async () => {
     try {
@@ -29,7 +29,7 @@ export class TablesApi extends ApiBase {
   };
 
   /**
-   * Получить стол по ID
+   * Get table by ID
    */
   public getTableById = async (tableId: number) => {
     try {
@@ -42,7 +42,7 @@ export class TablesApi extends ApiBase {
   };
 
   /**
-   * Обновить статус стола
+   * Update table status
    */
   public updateTableStatus = async (tableId: number, status: ITable["status"]) => {
     try {
@@ -58,7 +58,7 @@ export class TablesApi extends ApiBase {
   };
 
   /**
-   * Создать бронь
+   * Create reservation
    */
   public createReservation = async (
     tableId: number,
@@ -77,7 +77,7 @@ export class TablesApi extends ApiBase {
   };
 
   /**
-   * Отменить бронь
+   * Cancel reservation
    */
   public cancelReservation = async (tableId: number) => {
     try {
@@ -92,14 +92,14 @@ export class TablesApi extends ApiBase {
   };
 
   /**
-   * Быстрая посадка гостей
+   * Quick seat guests
    */
   public quickSeatTable = async (tableId: number) => {
     return this.updateTableStatus(tableId, "OCCUPIED");
   };
 
   /**
-   * Освободить стол
+   * Free table
    */
   public freeTable = async (tableId: number) => {
     return this.updateTableStatus(tableId, "AVAILABLE");

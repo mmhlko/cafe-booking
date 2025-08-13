@@ -26,9 +26,9 @@ export const TableModal: React.FC<Props> = ({ table, onClose }) => {
       OCCUPIED: "bg-red-100 text-red-700 border-red-200",
     };
     const labelMap: Record<ITable["status"], string> = {
-      AVAILABLE: "Свободен",
-      RESERVED: "Забронирован",
-      OCCUPIED: "Занят",
+      AVAILABLE: "Available",
+      RESERVED: "Reserved",
+      OCCUPIED: "Occupied",
     };
     return { cls: colorMap[table.status], label: labelMap[table.status] };
   }, [table?.status]);
@@ -57,6 +57,7 @@ export const TableModal: React.FC<Props> = ({ table, onClose }) => {
       await quickSeatTable(table.id);
     } finally {
       setIsSeating(false);
+      onClose();
     }
   };
 
@@ -66,6 +67,7 @@ export const TableModal: React.FC<Props> = ({ table, onClose }) => {
       await freeTable(table.id);
     } finally {
       setIsFreeing(false);
+      onClose();
     }
   };
 
@@ -83,18 +85,18 @@ export const TableModal: React.FC<Props> = ({ table, onClose }) => {
         </div>
         <div className="mt-2 grid grid-cols-2 gap-3">
           <div className="rounded-lg border bg-gray-50 p-3">
-            <div className="text-xs text-gray-500">Вместимость</div>
-            <div className="mt-1 text-base font-medium text-gray-900">{table.capacity} гостей</div>
+            <div className="text-xs text-gray-500">Capacity</div>
+            <div className="mt-1 text-base font-medium text-gray-900">{table.capacity} guests</div>
           </div>
           <div className="rounded-lg border bg-gray-50 p-3">
-            <div className="text-xs text-gray-500">Текущее состояние</div>
+            <div className="text-xs text-gray-500">Current Status</div>
             <div className="mt-1 text-base font-medium text-gray-900">{statusBadge.label}</div>
           </div>
         </div>
         {table?.reservation && (
           <div className="mt-2 flex">
             <div className="rounded-lg w-full border bg-gray-50 p-3">
-              <div className="text-xs text-gray-500">Инфо</div>
+              <div className="text-xs text-gray-500">Info</div>
               <div className="mt-1 text-base font-normal text-gray-900">Name: {table.reservation.customerName}</div>
               <div className="mt-1 text-base font-normal text-gray-900">Phone: {table.reservation.phone}</div>
               <div className="mt-1 text-base font-normal text-gray-900">Guests: {table.reservation.guests}</div>
@@ -112,35 +114,38 @@ export const TableModal: React.FC<Props> = ({ table, onClose }) => {
         ) :
           (
             <div className="flex flex-col gap-2">
-              {table.status === 'AVAILABLE' && (
+              {table.status === 'AVAILABLE' ? (
+                <>
+                  <Button
+                    className="bg-blue-500 text-white p-2 rounded"
+                    onClick={handleOpenReserveForm}
+                    loading={false}
+                    disabled={false}
+                    color='blue'
+                  >
+                    Create Booking
+                  </Button>
+                  <Button
+                    className="text-white p-2 rounded  "
+                    onClick={handleQuickSeat}
+                    loading={isSeating}
+                    disabled={isSeating}
+                    color='green'
+                  >
+                    Quick Seating
+                  </Button>
+                </>
+              ) : (
                 <Button
-                  className="bg-blue-500 text-white p-2 rounded"
-                  onClick={handleOpenReserveForm}
-                  loading={false}
-                  disabled={false}
-                  color='blue'
+                  className="text-white p-2 rounded"
+                  onClick={handleFree}
+                  loading={isFreeing}
+                  disabled={isFreeing}
+                  color='gray'
                 >
-                  Создать бронь
+                  Free Table
                 </Button>
               )}
-              <Button
-                className="text-white p-2 rounded  "
-                onClick={handleQuickSeat}
-                loading={isSeating}
-                disabled={isSeating}
-                color='green'
-              >
-                Быстрая посадка
-              </Button>
-              <Button
-                className="text-white p-2 rounded"
-                onClick={handleFree}
-                loading={isFreeing}
-                disabled={isFreeing}
-                color='gray'
-              >
-                Освободить стол
-              </Button>
             </div>
           )
 
@@ -150,7 +155,7 @@ export const TableModal: React.FC<Props> = ({ table, onClose }) => {
           className="mt-4 w-full text-white p-2 rounded"
           color='red'
         >
-          Закрыть
+          Close
         </Button>
 
       </div>

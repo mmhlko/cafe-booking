@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API_PORT = process.env.API_PORT;
 
 const nextConfig = {
   output: 'standalone',
@@ -22,7 +22,7 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: `${API_URL}/:path*`,
+        destination: API_PORT ? `http://api:${API_PORT}/:path*` : `http://localhost:3001/:path*`,
         basePath: false,
       },
     ];

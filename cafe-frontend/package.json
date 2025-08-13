@@ -1,5 +1,5 @@
 {
-  "name": "/cafe-frontend",
+  "name": "cafe-frontend",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",

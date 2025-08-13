@@ -1,7 +1,5 @@
 'use client';
 
-import { useWebSocket } from '@/app/_contexts/WebSocketContext';
-import { useState } from 'react';
 import { Tables } from '@/widgets/tables';
 export default function ProductsPage() {
   return (

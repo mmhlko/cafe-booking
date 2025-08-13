@@ -4,7 +4,7 @@ import { ITable } from "../types";
 
 interface Props {
   table: ITable | null;
-  onClick: (table: ITable | null) => void;
+  onClick: (table: ITable) => void;
 }
 
 export const TableCard: React.FC<Props> = ({ table, onClick }) => {
@@ -24,7 +24,7 @@ export const TableCard: React.FC<Props> = ({ table, onClick }) => {
       className={`cursor-pointer rounded-lg p-4 shadow-md text-white flex flex-col items-center justify-center ${statusColors[table.status]} hover:opacity-80`}
     >
       <div className="text-lg font-bold">{table.name}</div>
-      <div className="text-sm">{table.capacity} мест</div>
+      <div className="text-sm">{table.capacity} seats</div>
     </div>
   );
 };

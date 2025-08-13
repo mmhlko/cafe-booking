@@ -13,7 +13,7 @@ export function TimeAgo({ datetime }: TimeAgoProps) {
     const updateTimeAgo = () => {
       const now = Date.now();
       const timestamp = new Date(datetime).getTime();
-      const diff = Math.floor((now - timestamp) / 1000); // разница в секундах
+      const diff = Math.floor((now - timestamp) / 1000); // difference in seconds
 
       if (diff < 60) {
         setTimeAgo(`${diff}s ago`);
@@ -29,10 +29,10 @@ export function TimeAgo({ datetime }: TimeAgoProps) {
       }
     };
 
-    // Обновляем сразу при монтировании
+    // Update immediately when mounted
     updateTimeAgo();
 
-    // Обновляем каждую секунду
+    // Update every second
     const interval = setInterval(updateTimeAgo, 1000);
 
     return () => clearInterval(interval);

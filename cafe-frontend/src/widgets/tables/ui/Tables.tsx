@@ -15,9 +15,9 @@ export function Tables() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">План зала ресторана</h1>
+      <h1 className="text-2xl font-bold mb-6">Restaurant Floor Plan</h1>
       <TableGrid tables={tables} onTableClick={handleTableClick} />
-      {selectedTable && <TableModal table={selectedTable} onClose={() => setSelectedTable(null)} onChangeStatus={updateTableStatus} />}
+      {selectedTable && <TableModal table={selectedTable} onClose={() => setSelectedTable(null)} />}
     </div>
   );
 }
