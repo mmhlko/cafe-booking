@@ -16,6 +16,8 @@ export const TableModal: React.FC<Props> = ({ table, onClose }) => {
   const [isSeating, setIsSeating] = useState(false);
   const [isFreeing, setIsFreeing] = useState(false);
   const [isReserveFormOpen, setIsReserveFormOpen] = useState(false);
+  const [isQuickSeatFormOpen, setIsQuickSeatFormOpen] = useState(false);
+  const [quickSeatGuests, setQuickSeatGuests] = useState<number>(1);
 
   // reservation form state is inside BookingForm component
 
@@ -34,6 +36,7 @@ export const TableModal: React.FC<Props> = ({ table, onClose }) => {
   }, [table?.status]);
 
   const handleOpenReserveForm = () => {
+    setIsQuickSeatFormOpen(false);
     setIsReserveFormOpen(true);
   };
 
@@ -50,14 +53,21 @@ export const TableModal: React.FC<Props> = ({ table, onClose }) => {
     }
   };
 
-  const handleQuickSeat = async () => {
+  const handleOpenQuickSeatForm = () => {
+    setIsReserveFormOpen(false);
+    setIsQuickSeatFormOpen(true);
+  };
+
+  const handleSubmitQuickSeat = async () => {
     if (!table) return;
+    if (quickSeatGuests < 1 || quickSeatGuests > table.capacity) return;
     setIsSeating(true);
     try {
-      await quickSeatTable(table.id, 2);
+      await quickSeatTable(table.id, quickSeatGuests);
+      setIsQuickSeatFormOpen(false);
+      onClose();
     } finally {
       setIsSeating(false);
-      onClose();
     }
   };
 
@@ -111,6 +121,42 @@ export const TableModal: React.FC<Props> = ({ table, onClose }) => {
             onSubmit={handleSubmitReservation}
             onCancel={() => setIsReserveFormOpen(false)}
           />
+        ) : isQuickSeatFormOpen ? (
+          <div className="mt-2 space-y-3">
+            <div className="grid grid-cols-1 gap-3">
+              <label className="flex flex-col gap-1">
+                <span className="text-xs text-gray-600">Guests</span>
+                <input
+                  type="number"
+                  min={1}
+                  max={table.capacity}
+                  value={quickSeatGuests}
+                  onChange={(e) => setQuickSeatGuests(Number(e.target.value))}
+                  className="w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </label>
+            </div>
+            <div className="flex gap-2">
+              <Button
+                className="bg-green-600 text-white p-2 rounded flex-1"
+                loading={isSeating}
+                disabled={isSeating}
+                color='green'
+                onClick={handleSubmitQuickSeat}
+              >
+                Confirm Seating
+              </Button>
+              <Button
+                type="button"
+                onClick={() => setIsQuickSeatFormOpen(false)}
+                className="p-2 rounded flex-1"
+                color='gray'
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
         ) :
           (
             <div className="flex flex-col gap-2">
@@ -127,9 +173,9 @@ export const TableModal: React.FC<Props> = ({ table, onClose }) => {
                   </Button>
                   <Button
                     className="text-white p-2 rounded  "
-                    onClick={handleQuickSeat}
-                    loading={isSeating}
-                    disabled={isSeating}
+                    onClick={handleOpenQuickSeatForm}
+                    loading={false}
+                    disabled={false}
                     color='green'
                   >
                     Quick Seating

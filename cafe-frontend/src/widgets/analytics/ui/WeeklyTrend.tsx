@@ -83,3 +83,4 @@ export function WeeklyTrend({ data, title = 'Weekly Trend', metric }: WeeklyTren
 }
 
 
+
