@@ -5,17 +5,22 @@ export class TableDto {
   name: string;
   capacity: number;
   status: TTableStatus;
-  reservation?: ReservationPayload
+  visitorData?: VisitorPayload
 }
 
-export class ReservationPayload {
-  customerName: string;
-  phone: string;
-  guests?: number;
-  time: string;
-  message: string
+export class VisitorPayload {
+  customerName?: string;
+  phone?: string;
+  guests: number;
+  time?: string;
+  message?: string
+  visitorId: string;
 }
 
 export class UpdateTableStatusPayload {
   status: TTableStatus;
+}
+
+export class QuickSeatPayload {
+  guests: number;
 }

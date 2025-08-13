@@ -8,4 +8,8 @@ export const apiRoutes = {
 		serverRoute: 'table',
 		baseRoute: 'api/table',
 	},
+  analytics: {
+    serverRoute: 'analytics',
+		baseRoute: 'api/analytics',
+  }
 }

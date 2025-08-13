@@ -1,6 +1,6 @@
 import { ApiBase } from "@/shared/lib/api/apiBase";
 import { apiRoutes } from "@/shared/lib/api/apiRoutes";
-import { ITable } from "../types";
+import { IReservationPayload, ITable } from "../types";
 
 interface TableApiResponse<Data> {
   success: boolean;
@@ -44,11 +44,11 @@ export class TablesApi extends ApiBase {
   /**
    * Update table status
    */
-  public updateTableStatus = async (tableId: number, status: ITable["status"]) => {
+  public updateTableStatus = async (tableId: number, status: ITable["status"], guests?: number) => {
     try {
       const { data } = await this.api.patch<ITable>(
         `${apiRoutes.table.baseRoute}/${tableId}/status`,
-        { status }
+        { status, guests }
       );
       return data;
     } catch (error: unknown) {
@@ -94,15 +94,30 @@ export class TablesApi extends ApiBase {
   /**
    * Quick seat guests
    */
-  public quickSeatTable = async (tableId: number) => {
-    return this.updateTableStatus(tableId, "OCCUPIED");
+  public quickSeatTable = async (tableId: number, guests: number) => {
+    try {
+      const { data } = await this.api.post<ITable>(
+        `${apiRoutes.table.baseRoute}/${tableId}/quick-seat`,
+        { guests }
+      )
+      return data;
+    } catch (error) {
+      throw error;
+    }
   };
 
   /**
    * Free table
    */
   public freeTable = async (tableId: number) => {
-    return this.updateTableStatus(tableId, "AVAILABLE");
+    try {
+      const { data } = await this.api.post<ITable>(
+        `${apiRoutes.table.baseRoute}/${tableId}/free`
+      )
+      return data;
+    } catch (error) {
+      throw error;
+    }
   };
 }
 

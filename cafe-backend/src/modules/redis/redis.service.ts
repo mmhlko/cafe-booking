@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Redis } from 'ioredis';
 import { ConfigService } from '@nestjs/config';
-import { TableDto } from '../api/dto/table.dto';
+import { TableDto } from '../tables/dto/table.dto';
 
 @Injectable()
 export class RedisService implements OnModuleInit, OnModuleDestroy {

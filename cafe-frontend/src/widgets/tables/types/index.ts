@@ -5,10 +5,10 @@ export interface ITable {
   name: string;
   capacity: number;
   status: TTableStatus;
-  reservation?: ReservationPayload
+  reservation?: IReservationPayload
 }
 
-export interface ReservationPayload {
+export interface IReservationPayload {
   customerName: string;
   phone: string;
   guests?: number;

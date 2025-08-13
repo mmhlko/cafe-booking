@@ -12,7 +12,7 @@ interface TableContextType {
   updateTableStatus: (tableId: number, status: ITable["status"]) => Promise<void>;
   createReservation: (tableId: number, reservationData: { customerName: string; phone: string; guests?: number; time: string }) => Promise<ITable | null>;
   cancelReservation: (tableId: number) => Promise<void>;
-  quickSeatTable: (tableId: number) => Promise<void>;
+  quickSeatTable: (tableId: number, guests: number) => Promise<void>;
   freeTable: (tableId: number) => Promise<void>;
 }
 
@@ -98,9 +98,9 @@ export function TableProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const quickSeatTable = async (tableId: number) => {
+  const quickSeatTable = async (tableId: number, guests: number) => {
     try {
-      const updatedTable = await tablesApi.quickSeatTable(tableId);
+      const updatedTable = await tablesApi.quickSeatTable(tableId, guests);
       if (updatedTable) {
         setTables(prevTables =>
           prevTables.map(t => t.id === tableId ? updatedTable : t)

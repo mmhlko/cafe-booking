@@ -7,23 +7,30 @@ import {
   Body,
   HttpCode,
   HttpStatus,
-  Query,
   BadRequestException,
+  Logger,
 } from '@nestjs/common';
 
-import { ReservationPayload, TableDto, UpdateTableStatusPayload, TTableStatus} from './dto/table.dto';
-import { ApiService } from './api.service';
+import {
+  UpdateTableStatusPayload,
+  QuickSeatPayload,
+  VisitorPayload,
+} from './dto/table.dto';
+import { TablesService } from './tables.service';
 
 @Controller('table')
-export class ApiController {
-  constructor(private readonly tablesService: ApiService) {}
+export class TablesiController {
+  private readonly logger = new Logger(TablesiController.name);
+
+  constructor(private readonly tablesService: TablesService) {}
 
   @Get()
   async getAllTables() {
     try {
       return this.tablesService.getAllTables();
     } catch (error) {
-      return [];
+      this.logger.error(error);
+      throw new BadRequestException(error);
     }
   }
 
@@ -36,10 +43,7 @@ export class ApiController {
     try {
       const tableId = parseInt(id, 10);
       if (isNaN(tableId)) throw new BadRequestException('Invalid table ID');
-      return this.tablesService.updateTable(
-        tableId,
-        body.status,
-      );
+      return this.tablesService.updateTable(tableId, body.status);
     } catch (error) {
       throw new BadRequestException(error);
     }
@@ -49,7 +53,7 @@ export class ApiController {
   @HttpCode(HttpStatus.OK)
   async createReservation(
     @Param('id') id: string,
-    @Body() reservationPayload: ReservationPayload,
+    @Body() reservationPayload: VisitorPayload,
   ) {
     try {
       const tableId = parseInt(id, 10);
@@ -64,28 +68,22 @@ export class ApiController {
     }
   }
 
-  @Post(':id/cancel')
-  @HttpCode(HttpStatus.OK)
-  async cancelReservation(@Param('id') id: string) {
-    try {
-      const tableId = parseInt(id);
-      if (isNaN(tableId)) throw new BadRequestException('Invalid table ID');
-      return this.tablesService.freeTable(tableId);
-    } catch (error) {
-      throw new BadRequestException(error);
-    }
-  }
-
   /**
    * Быстрая посадка гостей
    */
   @Post(':id/quick-seat')
   @HttpCode(HttpStatus.OK)
-  async quickSeatTable(@Param('id') id: string) {
+  async quickSeatTable(
+    @Param('id') id: string,
+    @Body() quickSeatPayload: QuickSeatPayload,
+  ) {
     try {
       const tableId = parseInt(id, 10);
       if (isNaN(tableId)) throw new BadRequestException('Invalid table ID');
-      return this.tablesService.quickSeatTable(tableId);
+      return this.tablesService.quickSeatTable(
+        tableId,
+        quickSeatPayload.guests,
+      );
     } catch (error) {
       throw new BadRequestException(error);
     }
@@ -97,27 +95,9 @@ export class ApiController {
     try {
       const tableId = parseInt(id, 10);
       if (isNaN(tableId)) throw new BadRequestException('Invalid table ID');
-      return this.tablesService.quickSeatTable(tableId);
+      return this.tablesService.freeTable(tableId);
     } catch (error) {
       throw new BadRequestException(error);
-    }
-  }
-
-  @Get('stats/overview')
-  async getTablesStats() {
-    try {
-      const stats = await this.tablesService.getTablesStats();
-      return {
-        success: true,
-        data: stats,
-        timestamp: new Date().toISOString(),
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: error.message,
-        timestamp: new Date().toISOString(),
-      };
     }
   }
 }

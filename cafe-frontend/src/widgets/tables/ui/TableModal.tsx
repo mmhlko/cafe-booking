@@ -54,7 +54,7 @@ export const TableModal: React.FC<Props> = ({ table, onClose }) => {
     if (!table) return;
     setIsSeating(true);
     try {
-      await quickSeatTable(table.id);
+      await quickSeatTable(table.id, 2);
     } finally {
       setIsSeating(false);
       onClose();

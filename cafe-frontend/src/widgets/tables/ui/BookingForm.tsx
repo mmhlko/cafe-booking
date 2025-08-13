@@ -25,9 +25,40 @@ export const BookingForm: React.FC<BookingFormProps> = ({
   const [guests, setGuests] = useState<number>(1);
   const [dateTime, setDateTime] = useState<string>("");
 
+  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value) {
+      const [hours, minutes] = value.split(':').map(Number);
+      const totalMinutes = hours * 60 + minutes;
+      const minMinutes = 10 * 60; // 10:00
+      const maxMinutes = 22 * 60; // 22:00
+      
+      if (totalMinutes >= minMinutes && totalMinutes <= maxMinutes) {
+        setDateTime(value);
+      }
+    } else {
+      setDateTime(value);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const timeIso = dateTime ? new Date(dateTime).toISOString() : new Date().toISOString();
+    
+    // Проверяем время перед отправкой
+    if (dateTime) {
+      const [hours, minutes] = dateTime.split(':').map(Number);
+      const totalMinutes = hours * 60 + minutes;
+      const minMinutes = 10 * 60; // 10:00
+      const maxMinutes = 22 * 60; // 22:00
+      
+      if (totalMinutes < minMinutes || totalMinutes > maxMinutes) {
+        alert('Время должно быть с 10:00 до 22:00');
+        return;
+      }
+    }
+    
+    const today = new Date().toISOString().split('T')[0]; // Получаем сегодняшнюю дату в формате YYYY-MM-DD
+    const timeIso = dateTime ? new Date(`${today}T${dateTime}`).toISOString() : new Date().toISOString();
     await onSubmit({ customerName: customerName || "Guest", phone, guests, time: timeIso });
   };
 
@@ -69,11 +100,11 @@ export const BookingForm: React.FC<BookingFormProps> = ({
             />
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-xs text-gray-600">Date and Time</span>
+            <span className="text-xs text-gray-600">Time</span>
             <input
-              type="datetime-local"
+              type="time"
               value={dateTime}
-              onChange={(e) => setDateTime(e.target.value)}
+              onChange={handleTimeChange}
               className="w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
