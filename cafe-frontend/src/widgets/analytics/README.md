@@ -174,3 +174,4 @@ The widget uses Tailwind CSS classes and follows the design system:
 - Lucide React (icons)
 - Radix UI components
 
+
