@@ -13,18 +13,18 @@ import { AnalyticsService } from '../analytics/analytics.service';
 export class TablesService implements OnModuleInit {
   private readonly logger = new Logger(TablesService.name);
   private mockTables: TableDto[] = [
-    { id: 1, name: 'Стол 1', capacity: 4, status: 'AVAILABLE' },
-    { id: 2, name: 'Стол 2', capacity: 2, status: 'AVAILABLE' },
-    { id: 3, name: 'Стол 3', capacity: 4, status: 'AVAILABLE' },
-    { id: 4, name: 'Стол 4', capacity: 4, status: 'AVAILABLE' },
-    { id: 5, name: 'Стол 5', capacity: 6, status: 'AVAILABLE' },
-    { id: 6, name: 'Стол 6', capacity: 2, status: 'AVAILABLE' },
-    { id: 7, name: 'Стол 7', capacity: 4, status: 'AVAILABLE' },
-    { id: 8, name: 'Стол 8', capacity: 2, status: 'AVAILABLE' },
-    { id: 9, name: 'Стол 9', capacity: 4, status: 'AVAILABLE' },
-    { id: 10, name: 'Стол 10', capacity: 6, status: 'AVAILABLE' },
-    { id: 11, name: 'Стол 11', capacity: 4, status: 'AVAILABLE' },
-    { id: 12, name: 'Стол 12', capacity: 2, status: 'AVAILABLE' },
+    { id: 1, name: 'Table 1', capacity: 4, status: 'AVAILABLE' },
+    { id: 2, name: 'Table 2', capacity: 2, status: 'AVAILABLE' },
+    { id: 3, name: 'Table 3', capacity: 4, status: 'AVAILABLE' },
+    { id: 4, name: 'Table 4', capacity: 4, status: 'AVAILABLE' },
+    { id: 5, name: 'Table 5', capacity: 6, status: 'AVAILABLE' },
+    { id: 6, name: 'Table 6', capacity: 2, status: 'AVAILABLE' },
+    { id: 7, name: 'Table 7', capacity: 4, status: 'AVAILABLE' },
+    { id: 8, name: 'Table 8', capacity: 2, status: 'AVAILABLE' },
+    { id: 9, name: 'Table 9', capacity: 4, status: 'AVAILABLE' },
+    { id: 10, name: 'Table 10', capacity: 6, status: 'AVAILABLE' },
+    { id: 11, name: 'Table 11', capacity: 4, status: 'AVAILABLE' },
+    { id: 12, name: 'Table 12', capacity: 2, status: 'AVAILABLE' },
   ];
 
   constructor(
